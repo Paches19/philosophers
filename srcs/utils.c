@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 11:22:49 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/09 13:04:32 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/10 11:41:28 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ unsigned long	ft_atoul(const char *str)
 	int				sign;
 	unsigned long	result;
 
+	if (!str)
+		return (0);
 	sign = 1;
 	while (*str && (*str == 32 || (*str >= 9 && *str <= 13)))
 		++str;
@@ -69,4 +71,31 @@ unsigned long	ft_atoul(const char *str)
 		++str;
 	}
 	return (result);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	unsigned char	*ptr;
+	size_t			i;
+
+	ptr = (unsigned char *) s;
+	i = -1;
+	while (++i < n && n > 0)
+		ptr[i] = 0;
+}
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	void			*ptr;
+	const size_t	len = count * size;
+
+	if (!count)
+		return (malloc(0));
+	if (len / count != size)
+		return (NULL);
+	ptr = (void *) malloc(len);
+	if (!ptr)
+		return (NULL);
+	ft_bzero(ptr, len);
+	return (ptr);
 }

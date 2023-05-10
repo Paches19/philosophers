@@ -33,10 +33,10 @@ typedef struct	s_philosopher
 	int				id;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
-	int				num_eat;
+	long			num_eat;
 	pthread_t		philo_thread;
 	unsigned long	last_time_eat;
-}				t_philosopher;
+}					t_philosopher;
 
 typedef struct	s_args
 {
@@ -44,15 +44,25 @@ typedef struct	s_args
 	unsigned long	time_to_die;
 	unsigned long	time_to_eat;
 	unsigned long	time_to_sleep;
-	unsigned long	num_eat;
-}		t_args;
+	long			num_eat;
+	unsigned long	time_init_prog;
+}					t_args;
+
+typedef struct	s_actions
+{
+	t_philosopher	philos;
+	t_args			args;
+}					t_actions;
 
 // ******************************* utils **************************************
 unsigned long	ft_atoul(const char *str);
 void			ft_putstr_fd(char *s, int fd);
 void			error_exit_malloc(void);
+void			*ft_calloc(size_t count, size_t size);
+void			ft_bzero(void *s, size_t n);
 // ******************************* free_structs *******************************
-void			free_structs(t_fork **forks, t_philosopher **philosophers);
+void			free_structs(t_fork **forks, t_philosopher **philos,
+	unsigned long);
 // ******************************* init_forks *********************************
 t_fork			**init_forks(int num_forks);
 // ******************************* init_philos ********************************

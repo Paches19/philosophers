@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 11:41:38 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/09 13:26:31 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/10 11:42:15 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static t_fork	*init_fork(int id)
 {
 	t_fork	*fork;
 
-	fork = (t_fork *)malloc(sizeof(t_fork));
+	fork = (t_fork *)ft_calloc(sizeof(t_fork), 1);
 	if (!fork)
 		error_exit_malloc();
 	fork->id = id;
@@ -29,7 +29,7 @@ t_fork	**init_forks(int num_forks)
 	int		i;
 	t_fork	**forks;
 
-	forks = (t_fork **)malloc(sizeof(t_fork *) * num_forks);
+	forks = (t_fork **)ft_calloc(sizeof(t_fork *), num_forks + 1);
 	if (!forks)
 		error_exit_malloc();
 	i = -1;
