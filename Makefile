@@ -5,32 +5,30 @@
 #                                                     +:+ +:+         +:+      #
 #    By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/05/09 11:30:44 by adpachec          #+#    #+#              #
-#    Updated: 2023/05/09 11:30:44 by adpachec         ###   ########.fr        #
+#    Created: 2023/05/11 13:07:46 by adpachec          #+#    #+#              #
+#    Updated: 2023/05/11 13:07:46 by adpachec         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Program name
-NAME 		=	philosophers
+NAME 		=	philo
 
 # Project directories
 SRCDIR 		=	srcs
 INCDIR 		=	include
 OBJDIR 		=	obj
-LIBDIR 		=	libft
 
 # Compiler and flags
 CC 			=	gcc
 CFLAGS 		=	-Wall -Wextra -Werror
+LDFLAGS 	= 	-pthread
 
 # Para adpachec
-INCLUDES 	= -I$(INCDIR)
-
+INCLUDES 	=	-I$(INCDIR)
 LEAKS 		=	-fsanitize=address -g
 
 # Source files
 SRCS		=	srcs/main.c \
-				srcs/philosophers.c \
 				srcs/free_structs.c \
 				srcs/init_forks.c \
 				srcs/init_philos.c \
@@ -68,14 +66,12 @@ $(NAME)		: 	$(OBJS)
 # Clean object files
 clean		:
 				@echo "$(RED)Deleting object files...$(RESET)\c"
-				@$(MAKE) clean --no-print-directory -C $(LIBDIR) 
 				@$(RM) $(OBJDIR)
 				@echo "$(GREEN) all object files DELETED !$(RESET)"
 
 # Clean everything and recompile
 fclean		: 	clean
 				@echo "$(RED)Deleting object and binary files...$(RESET)\c"
-				@$(MAKE) fclean --no-print-directory -C $(LIBDIR)
 				@$(RM) $(NAME)
 				@echo "$(GREEN)all files DELETED !$(RESET)"
 

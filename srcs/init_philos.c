@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 11:41:36 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/10 13:18:55 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:21:15 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@ static t_philosopher	*init_philosopher(int id, t_fork *left_fork, t_fork *right_
 	philosopher->right_fork = right_fork;
 	philosopher->num_eat = 0;
 	philosopher->last_time_eat = 0;
+	philosopher->timer = 0;
+	philosopher->state = TO_EAT;
 	return (philosopher);
 }
 
-t_philosopher	**init_philosophers(int num_philosophers, t_fork **forks)
+t_philosopher	**init_philosophers(unsigned long num_philosophers, t_fork **forks)
 {
-	int				i;
+	unsigned long	i;
 	t_philosopher	**philosophers;
 
 	philosophers = (t_philosopher **)ft_calloc(sizeof(t_philosopher *),

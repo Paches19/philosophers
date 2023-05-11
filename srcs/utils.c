@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 11:22:49 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/10 11:41:28 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/11 14:19:46 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,15 @@ unsigned long	ft_atoul(const char *str)
 			sign = (-1);
 		++str;
 	}
+	if (sign == -1)
+		return (0);
 	result = 0;
-	while (ft_isdigit(*str))
+	while (*str)
 	{
+		if (!ft_isdigit(*str))
+			return (0);
 		result = (result * 10) + (*str - '0') * sign;
 		if (result > ULONG_MAX)
-			error_exit_ulong();
-		else if (result < (ULONG_MAX * (-1)))
 			error_exit_ulong();
 		++str;
 	}

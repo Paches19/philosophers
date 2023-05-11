@@ -22,6 +22,22 @@
 # include <limits.h>
 # include <sys/time.h>
 
+# define RED_ERROR "\033[1;31m"
+# define LIGHT_RED "\033[1;91m"
+# define BLUE "\033[1;94m"
+# define LIGHT_BLUE "\033[1;96m"
+# define COLOR_RESET "\033[0m"
+
+typedef enum	e_state
+{
+	TO_EAT,
+	EATING,
+	TO_SLEEP,
+	SLEEPING,
+	TO_THINK,
+	THINKING
+}	t_state;
+
 typedef struct	s_fork 
 {
 	int				id;
@@ -31,12 +47,20 @@ typedef struct	s_fork
 typedef struct	s_philosopher 
 {
 	int				id;
+	long			num_eat;
+	unsigned long	last_time_eat;
+	unsigned long	timer;
+	pthread_t		philo_thread;
 	t_fork			*left_fork;
 	t_fork			*right_fork;
-	long			num_eat;
-	pthread_t		philo_thread;
-	unsigned long	last_time_eat;
+	t_state			state;
 }					t_philosopher;
+
+typedef struct	s_stop
+{
+	int				stop;
+	pthread_mutex_t	mutex;
+}					t_stop;
 
 typedef struct	s_args
 {
@@ -44,14 +68,16 @@ typedef struct	s_args
 	unsigned long	time_to_die;
 	unsigned long	time_to_eat;
 	unsigned long	time_to_sleep;
-	long			num_eat;
+	unsigned long	num_eat;
 	unsigned long	time_init_prog;
 }					t_args;
 
 typedef struct	s_actions
 {
-	t_philosopher	philos;
+	t_philosopher	*philos;
 	t_args			args;
+	t_stop			*stop;
+	pthread_mutex_t	print_mutex;
 }					t_actions;
 
 // ******************************* utils **************************************
@@ -61,12 +87,11 @@ void			error_exit_malloc(void);
 void			*ft_calloc(size_t count, size_t size);
 void			ft_bzero(void *s, size_t n);
 // ******************************* free_structs *******************************
-void			free_structs(t_fork **forks, t_philosopher **philos,
-	unsigned long);
+void			free_structs(t_fork **forks, t_philosopher **philos, unsigned long);
 // ******************************* init_forks *********************************
-t_fork			**init_forks(int num_forks);
+t_fork			**init_forks(unsigned long num_forks);
 // ******************************* init_philos ********************************
-t_philosopher	**init_philosophers(int num_philosophers, t_fork **forks);
+t_philosopher	**init_philosophers(unsigned long num_philosophers, t_fork **forks);
 // ******************************* start_eating ********************************
 void			start_eating(t_args args, t_fork **forks,
 	t_philosopher **philosophers);
