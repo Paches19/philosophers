@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:46:48 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/12 10:35:13 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/12 11:29:55 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,11 @@
 t_args	initialize_args(int argc, char **argv) 
 {
 	t_args	args;
-	struct timeval	current_timeval;
 
 	args.num_philosophers = ft_atoul(argv[1]);
 	args.time_to_die = ft_atoul(argv[2]);
 	args.time_to_eat = ft_atoul(argv[3]);
 	args.time_to_sleep = ft_atoul(argv[4]);
-	gettimeofday(&current_timeval, NULL);
-	args.time_init_prog = current_timeval.tv_sec * 1000 +
-		current_timeval.tv_usec / 1000;
 	if (argc == 6)
 		args.num_eat = (long) ft_atoul(argv[5]);
 	else
@@ -94,7 +90,8 @@ int	main(int argc, char **argv)
 		return (exit_bad_args());
 	else if (args.num_philosophers == 1)
 	{
-		printf("Time: 0 \tphilosopher: 1 died 💀\n");
+		printf("Time: 0 \tphilosopher: 1 has taken a fork 🍴\n");
+		printf("Time: %ld \tphilosopher: 1 died 💀\n", args.time_to_die);
 		return (0);
 	}
 	else

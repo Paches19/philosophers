@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:11:14 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/12 11:03:28 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/12 11:43:35 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void	print_log(t_actions *actions, int philos_id, long time_init, char *msg)
 	struct timeval	current_timeval;
 	unsigned long	current_time;
 
+	pthread_mutex_lock(&(actions->print_mutex));
 	gettimeofday(&current_timeval, NULL);
 	current_time = ((current_timeval.tv_sec * 1000) +
 		(current_timeval.tv_usec / 1000)) - time_init;
-	pthread_mutex_lock(&(actions->print_mutex));
 	printf("Time: %ld \tphilosopher: %d %s\n",
 		current_time, philos_id, msg);
 	pthread_mutex_unlock(&(actions->print_mutex));
@@ -167,27 +167,16 @@ void	join_philosophers_threads(int num_philosophers,
 		pthread_join(philosophers[i]->philo_thread, NULL);
 }
 
-void	print_state(int id, int state)
-{
-	if (state == 0)
-		printf("philo: %d state: TO_EAT\n", id);
-	else if (state == 1)
-		printf("philo: %d state: EATING\n", id);
-	else if (state == 2)
-		printf("philo: %d state: TO_SLEEP\n", id);
-	else if (state == 3)
-		printf("philo: %d state: SLEEPING\n", id);
-	else if (state == 4)
-		printf("philo: %d state: TO_THINK\n", id);
-	else if (state == 5)
-		printf("philo: %d state: THINKING\n", id);
-}
-
 static void	*philosopher_actions(void *arg)
 {
 	t_actions	*actions;
+	struct timeval	current_time;
 
 	actions = (t_actions *)arg;
+	gettimeofday(&current_time, NULL);
+	actions->args.time_init_prog = current_time.tv_sec * 1000 +
+	current_time.tv_usec / 1000;
+	actions->philos->last_time_eat = actions->args.time_init_prog;
 	while (1)
 	{
 		// pthread_mutex_lock(&(actions->print_mutex));
@@ -200,7 +189,6 @@ static void	*philosopher_actions(void *arg)
 		think_philo(actions);
 		if (!is_philo_alive(actions))
 			return (NULL);
-		usleep(500);
 	}
 	return (NULL);
 }
