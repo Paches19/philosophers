@@ -49,7 +49,7 @@ typedef struct	s_philosopher
 	int				id;
 	long			num_eat;
 	unsigned long	last_time_eat;
-	unsigned long	timer;
+	unsigned long	init_state;
 	pthread_t		philo_thread;
 	t_fork			*left_fork;
 	t_fork			*right_fork;

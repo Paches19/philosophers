@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:46:48 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/11 14:20:03 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/12 10:35:13 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_args	initialize_args(int argc, char **argv)
 	// printf("time_to_eat: %ld\n", args.time_to_eat);
 	// printf("time_to_sleep: %ld\n", args.time_to_sleep);
 	// printf("num_eat: %ld\n", args.num_eat);
+	// printf("time_init_prog: %ld\n", args.time_init_prog);
 	return args;
 }
 
