@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:11:14 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/16 12:13:25 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:59:18 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,16 @@ void	print_log(t_actions *actions, int philos_id, long time_init, char *msg)
 		(current_timeval.tv_usec / 1000)) - time_init;
 	pthread_mutex_lock(&(actions->print_mutex));
 	if (!actions->stop->stop)
-		printf("Time: %ld \tphilosopher: %d %s\n",
-			current_time, philos_id, msg);			
+	{
+		if (!ft_strcmp("is eating", msg))
+			printf("Time: %-*ld philosopher: %-*d %-*s meals: %-*ld\n",
+   			WIDTH_TIME, current_time, WIDTH_PHILOSOPHER, philos_id, WIDTH_MESSAGE,
+			msg, WIDTH_MEALS, actions->philos->num_eat + 1);
+		else
+			printf("Time: %-*ld philosopher: %-*d %-*s meals: %-*ld\n",
+   			WIDTH_TIME, current_time, WIDTH_PHILOSOPHER, philos_id, WIDTH_MESSAGE,
+			msg, WIDTH_MEALS, actions->philos->num_eat);
+	}
 	pthread_mutex_unlock(&(actions->print_mutex));
 }
 
@@ -41,11 +49,11 @@ void	eat(t_actions *actions)
 		actions->philos->state = EATING;
 		actions->philos->last_time_eat = current_time;
 		actions->philos->init_state = current_time;
-		actions->philos->num_eat++;
 		print_log(actions, actions->philos->id, actions->args.time_init_prog, "is eating 🍝");
 	}
 	else if (actions->philos->state == EATING && current_time - actions->philos->init_state >= actions->args.time_to_eat)
 	{
+		actions->philos->num_eat++;
 		actions->philos->state = TO_SLEEP;
 		pthread_mutex_unlock(&(actions->philos->left_fork->mutex));
 		pthread_mutex_unlock(&(actions->philos->right_fork->mutex));
@@ -156,6 +164,19 @@ void	join_philosophers_threads(int num_philosophers,
 		pthread_join(philosophers[i]->philo_thread, NULL);
 }
 
+int	end_eat_times(t_actions *actions)
+{
+	if (actions->args.num_eat == -1)
+		return (0);
+	else if (actions->philos->num_eat >= actions->args.num_eat)
+	{
+		pthread_mutex_unlock(&(actions->philos->left_fork->mutex));
+		pthread_mutex_unlock(&(actions->philos->right_fork->mutex));
+		return (1);
+	}
+	return (0);
+}
+
 static void	*philosopher_actions(void *arg)
 {
 	t_actions	*actions;
@@ -163,11 +184,12 @@ static void	*philosopher_actions(void *arg)
 
 	actions = (t_actions *)arg;
 	actions->philos->last_time_eat = actions->args.time_init_prog;
-	alive = 1;
 	while (1)
 	{
 		think_philo(actions);
 		take_forks(actions);
+		if (end_eat_times(actions))
+			return (NULL);
 		sleep_philo(actions);
 		alive = is_philo_alive(actions);
 		if (!alive)

@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 11:22:49 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/11 14:19:46 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/16 13:02:45 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,24 @@ void	ft_bzero(void *s, size_t n)
 	i = -1;
 	while (++i < n && n > 0)
 		ptr[i] = 0;
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t	i;
+
+	if (!s1)
+		return (1);
+	i = 0;
+	while (s1[i])
+	{
+		if (s1[i] != s2[i])
+		{
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		}
+		i++;
+	}
+	return (0);
 }
 
 void	*ft_calloc(size_t count, size_t size)

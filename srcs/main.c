@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:46:48 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/16 11:14:22 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/16 12:25:13 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	not_enough_args(void)
 
 int	check_args(t_args args)
 {
-	if ((long) args.num_eat < -1)
+	if ((long) args.num_eat < -1 || args.num_eat == 0)
 		return (0);
 	else if (args.num_philosophers == 0)
 		return (0);
