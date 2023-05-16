@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:11:14 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/16 20:27:36 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:28:42 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,7 @@ void	sleep_philo(t_actions *actions)
 		actions->philos->init_state = current_time;
 		actions->philos->state = SLEEPING;
 		pthread_mutex_lock(&(actions->stop->mutex));
-		// if (!actions->stop->stop)
-			print_log(actions, actions->philos->id, actions->args.time_init_prog, "is sleeping 💤");
+		print_log(actions, actions->philos->id, actions->args.time_init_prog, "is sleeping 💤");
 		pthread_mutex_unlock(&(actions->stop->mutex));
 	}
 	else if (actions->philos->state == SLEEPING && current_time - actions->philos->init_state >= actions->args.time_to_sleep)
@@ -121,8 +120,7 @@ void	think_philo(t_actions *actions)
 	{
 		actions->philos->state = THINKING;
 		pthread_mutex_lock(&(actions->stop->mutex));
-		// if (!actions->stop->stop)
-			print_log(actions, actions->philos->id, actions->args.time_init_prog, "is thinking 💭");
+		print_log(actions, actions->philos->id, actions->args.time_init_prog, "is thinking 💭");
 		pthread_mutex_unlock(&(actions->stop->mutex));
 	}
 	else if (actions->philos->state == THINKING)
