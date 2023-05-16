@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:11:14 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/16 12:59:18 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/16 13:38:50 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	print_log(t_actions *actions, int philos_id, long time_init, char *msg)
 	gettimeofday(&current_timeval, NULL);
 	current_time = ((current_timeval.tv_sec * 1000) +
 		(current_timeval.tv_usec / 1000)) - time_init;
-	pthread_mutex_lock(&(actions->print_mutex));
 	if (!actions->stop->stop)
 	{
+		pthread_mutex_lock(&(actions->print_mutex));
 		if (!ft_strcmp("is eating", msg))
 			printf("Time: %-*ld philosopher: %-*d %-*s meals: %-*ld\n",
    			WIDTH_TIME, current_time, WIDTH_PHILOSOPHER, philos_id, WIDTH_MESSAGE,
@@ -31,8 +31,8 @@ void	print_log(t_actions *actions, int philos_id, long time_init, char *msg)
 			printf("Time: %-*ld philosopher: %-*d %-*s meals: %-*ld\n",
    			WIDTH_TIME, current_time, WIDTH_PHILOSOPHER, philos_id, WIDTH_MESSAGE,
 			msg, WIDTH_MEALS, actions->philos->num_eat);
+		pthread_mutex_unlock(&(actions->print_mutex));
 	}
-	pthread_mutex_unlock(&(actions->print_mutex));
 }
 
 void	eat(t_actions *actions)
@@ -66,21 +66,25 @@ void	take_forks(t_actions *actions)
 		return ;
 	else if (actions->philos->id % 2 == 0 && actions->philos->state == TO_EAT)
 	{
-		pthread_mutex_lock(&(actions->philos->right_fork->mutex));
 		if (!actions->stop->stop)
+			pthread_mutex_lock(&(actions->philos->right_fork->mutex));
+		if (!actions->stop->stop)
+		{
 			print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
-		if (!actions->stop->stop)
 			pthread_mutex_lock(&(actions->philos->left_fork->mutex));
+		}
 		if (!actions->stop->stop)
 			print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
 	}
 	else if (actions->philos->id % 2 != 0 && actions->philos->state == TO_EAT)
 	{
-		pthread_mutex_lock(&(actions->philos->left_fork->mutex));
 		if (!actions->stop->stop)
+			pthread_mutex_lock(&(actions->philos->left_fork->mutex));
+		if (!actions->stop->stop)
+		{
 			print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
-		if (!actions->stop->stop)
 			pthread_mutex_lock(&(actions->philos->right_fork->mutex));
+		}
 		if (!actions->stop->stop)
 			print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
 	}
@@ -194,6 +198,7 @@ static void	*philosopher_actions(void *arg)
 		alive = is_philo_alive(actions);
 		if (!alive)
 			return (NULL);
+		usleep(200);
 	}
 	return (NULL);
 }
