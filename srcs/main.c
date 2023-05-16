@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 13:46:48 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/12 11:29:55 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:14:22 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	not_enough_args(void)
 	ft_putstr_fd(" start the program\n", 2);
 	ft_putstr_fd(LIGHT_BLUE, 2);
 	ft_putstr_fd("Arguments to give:\n", 2);
-	ft_putstr_fd("./philo number_of_philosophers | time_to_die time_to_eat |", 2);
+	ft_putstr_fd("./philo number_of_philosophers | time_to_die | time_to_eat |", 2);
 	ft_putstr_fd(" time_to_sleep | [number_of_times_each_philosopher_must_eat]\n", 2);
 	ft_putstr_fd(COLOR_RESET, 2);
 	return (0);

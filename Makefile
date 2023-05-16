@@ -20,12 +20,12 @@ OBJDIR 		=	obj
 
 # Compiler and flags
 CC 			=	gcc
-CFLAGS 		=	-Wall -Wextra -Werror
+CFLAGS 		=	-MMD -Wall -Wextra -Werror
 LDFLAGS 	= 	-pthread
 
 # Para adpachec
 INCLUDES 	=	-I$(INCDIR)
-LEAKS 		=	-fsanitize=address -g
+LEAKS 		=	-fsanitize=address -g3
 
 # Source files
 SRCS		=	srcs/main.c \
