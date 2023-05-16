@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 11:41:38 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/11 14:21:21 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/16 21:11:03 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static t_fork	*init_fork(int id)
 	if (!fork)
 		error_exit_malloc();
 	fork->id = id;
-	pthread_mutex_init(&fork->mutex, NULL);
+	if (pthread_mutex_init(&fork->mutex, NULL) < 0)
+		error_exit_mutex();
 	return (fork);
 }
 
