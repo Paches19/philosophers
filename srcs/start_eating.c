@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:11:14 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/16 13:38:50 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/16 20:27:36 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	print_log(t_actions *actions, int philos_id, long time_init, char *msg)
 	gettimeofday(&current_timeval, NULL);
 	current_time = ((current_timeval.tv_sec * 1000) +
 		(current_timeval.tv_usec / 1000)) - time_init;
-	if (!actions->stop->stop)
+	if (!actions->stop->stop || !ft_strcmp("died", msg))
 	{
 		pthread_mutex_lock(&(actions->print_mutex));
 		if (!ft_strcmp("is eating", msg))
@@ -66,27 +66,27 @@ void	take_forks(t_actions *actions)
 		return ;
 	else if (actions->philos->id % 2 == 0 && actions->philos->state == TO_EAT)
 	{
-		if (!actions->stop->stop)
-			pthread_mutex_lock(&(actions->philos->right_fork->mutex));
+		pthread_mutex_lock(&(actions->philos->right_fork->mutex));
+		usleep(50);
 		if (!actions->stop->stop)
 		{
 			print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
 			pthread_mutex_lock(&(actions->philos->left_fork->mutex));
 		}
-		if (!actions->stop->stop)
-			print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
+		usleep(50);
+		print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
 	}
 	else if (actions->philos->id % 2 != 0 && actions->philos->state == TO_EAT)
 	{
-		if (!actions->stop->stop)
-			pthread_mutex_lock(&(actions->philos->left_fork->mutex));
+		pthread_mutex_lock(&(actions->philos->left_fork->mutex));
+		usleep(50);
 		if (!actions->stop->stop)
 		{
 			print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
 			pthread_mutex_lock(&(actions->philos->right_fork->mutex));
 		}
-		if (!actions->stop->stop)
-			print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
+		usleep(50);
+		print_log(actions, actions->philos->id, actions->args.time_init_prog, "has taken a fork 🍴");
 	}
 	eat(actions);
 }
@@ -105,7 +105,7 @@ void	sleep_philo(t_actions *actions)
 		actions->philos->init_state = current_time;
 		actions->philos->state = SLEEPING;
 		pthread_mutex_lock(&(actions->stop->mutex));
-		if (!actions->stop->stop)
+		// if (!actions->stop->stop)
 			print_log(actions, actions->philos->id, actions->args.time_init_prog, "is sleeping 💤");
 		pthread_mutex_unlock(&(actions->stop->mutex));
 	}
@@ -121,7 +121,7 @@ void	think_philo(t_actions *actions)
 	{
 		actions->philos->state = THINKING;
 		pthread_mutex_lock(&(actions->stop->mutex));
-		if (!actions->stop->stop)
+		// if (!actions->stop->stop)
 			print_log(actions, actions->philos->id, actions->args.time_init_prog, "is thinking 💭");
 		pthread_mutex_unlock(&(actions->stop->mutex));
 	}
@@ -147,9 +147,9 @@ int	is_philo_alive(t_actions *actions)
 	else if ((current_time - actions->philos->last_time_eat)
 		> actions->args.time_to_die && actions->philos->state != EATING)
 	{
-		print_log(actions, actions->philos->id, actions->args.time_init_prog, "died 💀");
 		actions->stop->stop = 1;
 		pthread_mutex_unlock(&(actions->stop->mutex));
+		print_log(actions, actions->philos->id, actions->args.time_init_prog, "died 💀");
 		pthread_mutex_unlock(&(actions->philos->left_fork->mutex));
 		pthread_mutex_unlock(&(actions->philos->right_fork->mutex));
 		return (0);
