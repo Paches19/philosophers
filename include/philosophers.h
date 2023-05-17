@@ -57,7 +57,9 @@ typedef struct	s_philosopher
 	unsigned long	init_state;
 	pthread_t		philo_thread;
 	t_fork			*left_fork;
+	int				l_fork_taken;
 	t_fork			*right_fork;
+	int				r_fork_taken;
 	t_state			state;
 }					t_philosopher;
 
@@ -118,6 +120,7 @@ int				end_eat_times(t_actions *actions);
 int				is_philo_alive(t_actions *actions);
 // ******************************* eat *****************************************
 void			take_forks(t_actions *actions);
+void			eat(t_actions *actions);
 // ******************************* sleep_think *********************************
 void			think_philo(t_actions *actions);
 void			sleep_philo(t_actions *actions);

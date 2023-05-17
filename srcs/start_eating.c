@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:11:14 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/16 21:15:24 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:25:50 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ void	print_log(t_actions *actions, int philos_id, long time_init, char *msg)
 	gettimeofday(&current_timeval, NULL);
 	current_time = ((current_timeval.tv_sec * 1000) +
 		(current_timeval.tv_usec / 1000)) - time_init;
+	pthread_mutex_lock(&(actions->stop->mutex));
 	if (!actions->stop->stop || !ft_strcmp("died", msg))
 	{
+		pthread_mutex_unlock(&(actions->stop->mutex));
 		pthread_mutex_lock(&(actions->print_mutex));
 		if (!ft_strcmp("is eating", msg))
 			printf("Time: %-*ld philosopher: %-*d %-*s meals: %-*ld\n",
@@ -33,6 +35,8 @@ void	print_log(t_actions *actions, int philos_id, long time_init, char *msg)
 			msg, WIDTH_MEALS, actions->philos->num_eat);
 		pthread_mutex_unlock(&(actions->print_mutex));
 	}
+	else
+		pthread_mutex_unlock(&(actions->stop->mutex));
 }
 
 static void	*philosopher_actions(void *arg)
@@ -46,6 +50,7 @@ static void	*philosopher_actions(void *arg)
 	{
 		think_philo(actions);
 		take_forks(actions);
+		eat(actions);
 		if (end_eat_times(actions))
 			return (NULL);
 		sleep_philo(actions);
@@ -94,7 +99,8 @@ void	start_eating(t_args args, t_philosopher **philosophers)
 			error_exit_thread();
 	}
 	join_philosophers_threads(args.num_philosophers, philosophers);
-	free(actions);
+	if (actions)
+		free(actions);
 	pthread_mutex_destroy(&(stop_signal.mutex));
 	pthread_mutex_destroy(&(print_mutex));
 }

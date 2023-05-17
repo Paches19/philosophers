@@ -20,7 +20,7 @@ OBJDIR 		=	obj
 
 # Compiler and flags
 CC 			=	gcc
-CFLAGS 		=	-Wall -Wextra -Werror
+CFLAGS 		=	-Wall -Wextra -Werror 
 LDFLAGS 	= 	-pthread
 
 # Para adpachec

@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:55:05 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/16 20:56:08 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:10:10 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,27 @@ int	end_eat_times(t_actions *actions)
 		return (0);
 	else if (actions->philos->num_eat >= actions->args.num_eat)
 	{
-		pthread_mutex_unlock(&(actions->philos->left_fork->mutex));
-		pthread_mutex_unlock(&(actions->philos->right_fork->mutex));
+		if (actions->philos->l_fork_taken)
+			pthread_mutex_unlock(&(actions->philos->left_fork->mutex));
+		if (actions->philos->r_fork_taken)
+			pthread_mutex_unlock(&(actions->philos->right_fork->mutex));
 		return (1);
 	}
 	return (0);
 }
 
-static int	end_philo(t_actions *actions)
+static int	leave_forks(t_actions *actions)
 {
-	pthread_mutex_unlock(&(actions->philos->left_fork->mutex));
-	pthread_mutex_unlock(&(actions->philos->right_fork->mutex));
-	pthread_mutex_unlock(&(actions->stop->mutex));
+	if (actions->philos->l_fork_taken)
+	{
+		pthread_mutex_unlock(&(actions->philos->left_fork->mutex));
+		actions->philos->l_fork_taken = 0;
+	}
+	if (actions->philos->r_fork_taken)
+	{
+		pthread_mutex_unlock(&(actions->philos->right_fork->mutex));
+		actions->philos->r_fork_taken = 0;
+	}
 	return (0);
 }
 
@@ -53,18 +62,23 @@ int	is_philo_alive(t_actions *actions)
 		current_timeval.tv_usec / 1000;
 	pthread_mutex_lock(&(actions->stop->mutex));
 	if (actions->stop->stop)
-		return (end_philo(actions));
+	{
+		// printf("philo: %d die\n", actions->philos->id);
+		pthread_mutex_unlock(&(actions->stop->mutex));
+		return (leave_forks(actions));
+	}
 	else if ((current_time - actions->philos->last_time_eat)
 		> actions->args.time_to_die && actions->philos->state != EATING)
 	{
+		// printf("philo: %d died\n", actions->philos->id);
 		actions->stop->stop = 1;
 		pthread_mutex_unlock(&(actions->stop->mutex));
+		leave_forks(actions);
 		print_log(actions, actions->philos->id, actions->args.time_init_prog,
 			"died 💀");
-		pthread_mutex_unlock(&(actions->philos->left_fork->mutex));
-		pthread_mutex_unlock(&(actions->philos->right_fork->mutex));
 		return (0);
 	}
-	pthread_mutex_unlock(&(actions->stop->mutex));
+	else
+		pthread_mutex_unlock(&(actions->stop->mutex));
 	return (1);
 }

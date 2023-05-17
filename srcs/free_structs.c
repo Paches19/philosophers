@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:04:37 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/11 13:22:45 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/17 11:30:13 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	free_structs(t_fork **forks, t_philosopher **philos,
 	if (philos && *philos)
 	{
 		i = -1;
-		while (++i < num_philo)
+		while (++i < num_philo && philos[i])
 			free(philos[i]);
 		free(philos);
 	}
@@ -29,9 +29,9 @@ void	free_structs(t_fork **forks, t_philosopher **philos,
 		i = -1;
 		while (++i < num_philo && forks[i])
 		{
-			pthread_mutex_destroy(&(*forks)[i].mutex);
+			pthread_mutex_destroy(&forks[i]->mutex);
 			free(forks[i]);
 		}
-	free(forks);
+		free(forks);
 	}
 }
