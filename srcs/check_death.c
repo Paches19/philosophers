@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:55:05 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/17 11:10:10 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/23 10:35:48 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,17 @@ int	is_philo_alive(t_actions *actions)
 	pthread_mutex_lock(&(actions->stop->mutex));
 	if (actions->stop->stop)
 	{
-		// printf("philo: %d die\n", actions->philos->id);
 		pthread_mutex_unlock(&(actions->stop->mutex));
 		return (leave_forks(actions));
 	}
 	else if ((current_time - actions->philos->last_time_eat)
 		> actions->args.time_to_die && actions->philos->state != EATING)
 	{
-		// printf("philo: %d died\n", actions->philos->id);
 		actions->stop->stop = 1;
 		pthread_mutex_unlock(&(actions->stop->mutex));
-		leave_forks(actions);
 		print_log(actions, actions->philos->id, actions->args.time_init_prog,
-			"died 💀");
+			"died");
+		leave_forks(actions);
 		return (0);
 	}
 	else

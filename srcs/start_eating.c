@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:11:14 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/17 11:25:50 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/23 10:36:03 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,20 @@ void	print_log(t_actions *actions, int philos_id, long time_init, char *msg)
 	struct timeval	current_timeval;
 	unsigned long	current_time;
 
+	pthread_mutex_lock(&(actions->stop->mutex));
 	gettimeofday(&current_timeval, NULL);
 	current_time = ((current_timeval.tv_sec * 1000) +
 		(current_timeval.tv_usec / 1000)) - time_init;
-	pthread_mutex_lock(&(actions->stop->mutex));
 	if (!actions->stop->stop || !ft_strcmp("died", msg))
 	{
 		pthread_mutex_unlock(&(actions->stop->mutex));
 		pthread_mutex_lock(&(actions->print_mutex));
 		if (!ft_strcmp("is eating", msg))
-			printf("Time: %-*ld philosopher: %-*d %-*s meals: %-*ld\n",
-   			WIDTH_TIME, current_time, WIDTH_PHILOSOPHER, philos_id, WIDTH_MSG,
-			msg, WIDTH_MEALS, actions->philos->num_eat + 1);
+			printf("Time: %ld philosopher: %d %s meals: %ld\n"
+			, current_time, philos_id, msg, actions->philos->num_eat + 1);
 		else
-			printf("Time: %-*ld philosopher: %-*d %-*s meals: %-*ld\n",
-   			WIDTH_TIME, current_time, WIDTH_PHILOSOPHER, philos_id, WIDTH_MSG,
-			msg, WIDTH_MEALS, actions->philos->num_eat);
+			printf("Time: %ld philosopher: %d %s meals: %ld\n",
+   			current_time, philos_id, msg, actions->philos->num_eat);
 		pthread_mutex_unlock(&(actions->print_mutex));
 	}
 	else
