@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:11:14 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/23 10:36:03 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/23 12:02:01 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	*philosopher_actions(void *arg)
 		alive = is_philo_alive(actions);
 		if (!alive)
 			return (NULL);
-		usleep(200);
+		// usleep(200);
 	}
 	return (NULL);
 }
