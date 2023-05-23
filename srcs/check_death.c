@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:55:05 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/23 10:35:48 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/23 18:12:37 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,21 @@ int	is_philo_alive(t_actions *actions)
 	struct timeval	current_timeval;
 	unsigned long	current_time;
 
+	pthread_mutex_lock(&(actions->stop->mutex));
 	gettimeofday(&current_timeval, NULL);
 	current_time = current_timeval.tv_sec * 1000 +
 		current_timeval.tv_usec / 1000;
-	pthread_mutex_lock(&(actions->stop->mutex));
 	if (actions->stop->stop)
 	{
 		pthread_mutex_unlock(&(actions->stop->mutex));
 		return (leave_forks(actions));
 	}
 	else if ((current_time - actions->philos->last_time_eat)
-		> actions->args.time_to_die && actions->philos->state != EATING)
+		>= actions->args.time_to_die)
 	{
-		actions->stop->stop = 1;
 		pthread_mutex_unlock(&(actions->stop->mutex));
-		print_log(actions, actions->philos->id, actions->args.time_init_prog,
+		print_death(actions, actions->philos->id, actions->args.time_init_prog,
 			"died");
-		leave_forks(actions);
 		return (0);
 	}
 	else

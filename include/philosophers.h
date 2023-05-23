@@ -101,6 +101,7 @@ void			*ft_calloc(size_t count, size_t size);
 unsigned long	ft_atoul(const char *str);
 void			ft_putstr_fd(char *s, int fd);
 void			error_exit_thread(void);
+void			ft_putnbr_fd(unsigned long n, int fd);
 // ******************************* free_structs ********************************
 void			free_structs(t_fork **forks, t_philosopher **philos,
 				unsigned long);
@@ -118,6 +119,8 @@ void			join_philosophers_threads(int num_philosophers,
 				t_philosopher **philosophers);
 int				end_eat_times(t_actions *actions);
 int				is_philo_alive(t_actions *actions);
+void			print_death(t_actions *actions, int philos_id, long time_init,
+	char *msg);
 // ******************************* eat *****************************************
 void			take_forks(t_actions *actions);
 void			eat(t_actions *actions);

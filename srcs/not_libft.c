@@ -6,11 +6,30 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 21:06:34 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/16 21:13:58 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/23 18:02:32 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+void	ft_putchar_fd(char c, int fd)
+{
+	write(fd, &c, 1);
+}
+
+void	ft_putnbr_fd(unsigned long n, int fd)
+{
+	unsigned long	temp;
+
+	temp = n;
+	if (temp >= 10)
+	{
+		ft_putnbr_fd(temp / 10, fd);
+		ft_putnbr_fd(temp % 10, fd);
+	}
+	else
+		ft_putchar_fd(temp + '0', fd);
+}
 
 void	error_exit_thread(void)
 {

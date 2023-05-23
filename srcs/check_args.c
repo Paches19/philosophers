@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:52:01 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/16 20:52:30 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/23 18:21:12 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	check_args(t_args args)
 {
 	if ((long) args.num_eat < -1 || args.num_eat == 0)
 		return (0);
-	else if (args.num_philosophers == 0)
+	else if (args.num_philosophers == 0 || args.num_philosophers >= 10000)
 		return (0);
 	else if (args.time_to_die == 0)
 		return (0);
@@ -66,7 +66,9 @@ int	exit_bad_args(void)
 	ft_putstr_fd(LIGHT_RED, 2);
 	ft_putstr_fd("Can't execute program. You need", 2);
 	ft_putstr_fd(" to give positive int arguments.\n", 2);
-	ft_putstr_fd(" You can't start the program with negative arguments\n", 2);
+	ft_putstr_fd("You can't start the program with negative arguments\n", 2);
+	ft_putstr_fd("You can't have so many pilosophers. Not enough resources\n",
+		2);
 	ft_putstr_fd(COLOR_RESET, 2);
 	return (1);
 }
