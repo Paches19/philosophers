@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:59:00 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/23 17:58:48 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/31 12:04:32 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	sleep_philo(t_actions *actions)
 	unsigned long	current_time;
 
 	gettimeofday(&current_timeval, NULL);
-	current_time = current_timeval.tv_sec * 1000 +
-		current_timeval.tv_usec / 1000;
+	current_time = current_timeval.tv_sec * 1000
+		+ current_timeval.tv_usec / 1000;
 	pthread_mutex_lock(&(actions->stop->mutex));
 	if (actions->philos->state == TO_SLEEP)
 	{
@@ -27,10 +27,10 @@ void	sleep_philo(t_actions *actions)
 		pthread_mutex_unlock(&(actions->stop->mutex));
 		actions->philos->init_state = current_time;
 		print_log(actions, actions->philos->id, actions->args.time_init_prog,
-		"is sleeping");
+			"is sleeping");
 	}
-	else if (actions->philos->state == SLEEPING && current_time -
-		actions->philos->init_state >= actions->args.time_to_sleep)
+	else if (actions->philos->state == SLEEPING && current_time
+		- actions->philos->init_state >= actions->args.time_to_sleep)
 	{
 		actions->philos->state = TO_THINK;
 		pthread_mutex_unlock(&(actions->stop->mutex));
@@ -41,7 +41,7 @@ void	sleep_philo(t_actions *actions)
 
 void	think_philo(t_actions *actions)
 {
-	pthread_mutex_lock(&(actions->stop->mutex)); 
+	pthread_mutex_lock(&(actions->stop->mutex));
 	if (actions->philos->state == TO_THINK)
 	{
 		actions->philos->state = THINKING;

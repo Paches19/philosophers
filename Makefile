@@ -25,7 +25,7 @@ LDFLAGS 	= 	-pthread
 
 # Para adpachec
 INCLUDES 	=	-I$(INCDIR)
-LEAKS 		=	-fsanitize=thread -g3
+# LEAKS 		=	-fsanitize=thread -g3
 
 # Source files
 SRCS		=	srcs/check_args.c \
@@ -36,6 +36,7 @@ SRCS		=	srcs/check_args.c \
 				srcs/init_philos.c \
 				srcs/main.c \
 				srcs/not_libft.c \
+				srcs/print_errors.c \
 				srcs/sleep_think.c \
 				srcs/start_eating.c \
 				srcs/take_forks.c \

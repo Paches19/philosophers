@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 21:06:34 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/23 18:02:32 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/31 12:04:41 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,6 @@ void	ft_putnbr_fd(unsigned long n, int fd)
 	}
 	else
 		ft_putchar_fd(temp + '0', fd);
-}
-
-void	error_exit_thread(void)
-{
-	ft_putstr_fd("ERROR: Thread init failed\n", 2);
-	exit(1);
 }
 
 static int	ft_isdigit(int arg)

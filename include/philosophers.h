@@ -27,13 +27,8 @@
 # define BLUE "\033[1;94m"
 # define LIGHT_BLUE "\033[1;96m"
 # define COLOR_RESET "\033[0m"
-# define WIDTH_TIME	8
-# define WIDTH_PHILOSOPHER	4
-# define WIDTH_MSG	22
-# define WIDTH_MEALS	8
 
-
-typedef enum	e_state
+typedef enum e_state
 {
 	TO_EAT,
 	EATING,
@@ -43,13 +38,13 @@ typedef enum	e_state
 	THINKING
 }	t_state;
 
-typedef struct	s_fork 
+typedef struct s_fork
 {
 	int				id;
 	pthread_mutex_t	mutex;
 }					t_fork;
 
-typedef struct	s_philosopher 
+typedef struct s_philosopher
 {
 	int				id;
 	long			num_eat;
@@ -63,13 +58,13 @@ typedef struct	s_philosopher
 	t_state			state;
 }					t_philosopher;
 
-typedef struct	s_stop
+typedef struct s_stop
 {
 	int				stop;
 	pthread_mutex_t	mutex;
 }					t_stop;
 
-typedef struct	s_args
+typedef struct s_args
 {
 	unsigned long	num_philosophers;
 	unsigned long	time_to_die;
@@ -79,7 +74,7 @@ typedef struct	s_args
 	unsigned long	time_init_prog;
 }					t_args;
 
-typedef struct	s_actions
+typedef struct s_actions
 {
 	t_philosopher	*philos;
 	t_args			args;
@@ -97,30 +92,32 @@ void			error_exit_malloc(void);
 void			error_exit_mutex(void);
 int				ft_strcmp(const char *s1, const char *s2);
 void			*ft_calloc(size_t count, size_t size);
-// ******************************* not_libft ***************************************
+// ******************************* not_libft ***********************************
 unsigned long	ft_atoul(const char *str);
 void			ft_putstr_fd(char *s, int fd);
 void			error_exit_thread(void);
 void			ft_putnbr_fd(unsigned long n, int fd);
 // ******************************* free_structs ********************************
 void			free_structs(t_fork **forks, t_philosopher **philos,
-				unsigned long);
+					unsigned long num_philo);
 // ******************************* init_forks **********************************
 t_fork			**init_forks(unsigned long num_forks);
 // ******************************* init_philos *********************************
 t_philosopher	**init_philosophers(unsigned long num_philosophers,
-				t_fork **forks);
+					t_fork **forks);
 // ******************************* start_eating ********************************
 void			start_eating(t_args args, t_philosopher **philosophers);
 void			print_log(t_actions *actions, int philos_id, long time_init,
-				char *msg);
+					char *msg);
 // ******************************* check_death *********************************
 void			join_philosophers_threads(int num_philosophers,
-				t_philosopher **philosophers);
+					t_philosopher **philosophers);
 int				end_eat_times(t_actions *actions);
 int				is_philo_alive(t_actions *actions);
 void			print_death(t_actions *actions, int philos_id, long time_init,
-	char *msg);
+					char *msg);
+void			is_philo_alive_main(t_actions *actions, int *stop,
+					t_stop *stop_signal);
 // ******************************* eat *****************************************
 void			take_forks(t_actions *actions);
 void			eat(t_actions *actions);
