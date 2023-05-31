@@ -61,6 +61,7 @@ typedef struct s_philosopher
 typedef struct s_stop
 {
 	int				stop;
+	int				end_eat;
 	pthread_mutex_t	mutex;
 }					t_stop;
 

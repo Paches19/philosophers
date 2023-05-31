@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 12:11:14 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/31 12:08:19 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/31 12:48:45 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	*philosopher_actions(void *arg)
 		alive = is_philo_alive(actions);
 		if (!alive)
 			return (NULL);
-		usleep(200);
+		usleep(100);
 	}
 	return (NULL);
 }
@@ -38,6 +38,7 @@ static void	*philosopher_actions(void *arg)
 static void	init_args(t_stop *stop_sig, pthread_mutex_t *p_mutex)
 {
 	stop_sig->stop = 0;
+	stop_sig->end_eat = 0;
 	if (pthread_mutex_init(&(stop_sig->mutex), NULL) < 0)
 		error_exit_mutex();
 	if (pthread_mutex_init((p_mutex), NULL) < 0)
@@ -74,14 +75,25 @@ t_actions	*init_actions(t_args *args, t_philosopher **philosophers,
 void	check_death_main(t_args args, t_stop *stop_signal, t_actions *actions)
 {
 	int				stop;
+	int				end_eat;
 	unsigned long	i;
 
 	stop = 0;
+	end_eat = 0;
 	while (!stop)
 	{
 		i = -1;
 		while (++i < args.num_philosophers && !stop)
+		{
 			is_philo_alive_main(&actions[i], &stop, stop_signal);
+			pthread_mutex_lock(&(stop_signal->mutex));
+			if (stop_signal->end_eat >= (int) args.num_philosophers)
+			{
+				pthread_mutex_unlock(&(stop_signal->mutex));
+				return ;
+			}
+			pthread_mutex_unlock(&(stop_signal->mutex));
+		}
 	}
 }
 

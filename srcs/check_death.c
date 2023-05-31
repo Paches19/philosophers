@@ -6,7 +6,7 @@
 /*   By: adpachec <adpachec@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 20:55:05 by adpachec          #+#    #+#             */
-/*   Updated: 2023/05/31 12:07:07 by adpachec         ###   ########.fr       */
+/*   Updated: 2023/05/31 12:45:29 by adpachec         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,18 @@ int	end_eat_times(t_actions *actions)
 	else if (actions->philos->num_eat >= actions->args.num_eat)
 	{
 		if (actions->philos->l_fork_taken)
+		{
 			pthread_mutex_unlock(&(actions->philos->left_fork->mutex));
+			actions->philos->l_fork_taken = 0;
+		}
 		if (actions->philos->r_fork_taken)
+		{
 			pthread_mutex_unlock(&(actions->philos->right_fork->mutex));
+			actions->philos->r_fork_taken = 0;
+		}
+		pthread_mutex_lock(&(actions->stop->mutex));
+		actions->stop->end_eat++;
+		pthread_mutex_unlock(&(actions->stop->mutex));
 		return (1);
 	}
 	return (0);
